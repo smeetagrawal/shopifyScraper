@@ -1,0 +1,17 @@
+{
+  "name": "shopify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "puppeteer": "^1.19.0",
+    "sequelize": "^5.15.0",
+    "sequelize-cli": "^5.5.0"
+  }
+}

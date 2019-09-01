@@ -53,7 +53,7 @@ let page;
             console.log("first page navigation urls",firstPageNavigationUrl);
             console.log('\n')
 
-            await page.goto(firstPageNavigationUrl);
+            await page.goto(firstPageNavigationUrl, { waitUntil: 'networkidle0' });
             await page.waitForSelector('._3EE3N');
 
             let result = await secondPageFunction();
@@ -71,6 +71,7 @@ let page;
 
 
 function secondPageFunction(){
+    
     return new Promise(async (resolve,reject) => {
 
         try {
@@ -82,10 +83,10 @@ function secondPageFunction(){
         // this will load all the html with the help of cheerio 
         let $secondPage = cheerio.load(secondPageBodyHtml);
 
-
         //  this is the root of second page
         let secondPageRoot = $secondPage('div.Zk7Cl > div:nth-child(2)').html();
 
+        console.log("this is html data",$secondPage.html())
         let $secondPageP = cheerio.load(secondPageRoot);
         // this is the parent of second page
         let secondPageParent = $secondPageP('section.jGIW4 > div:nth-child(2)').html();
@@ -93,6 +94,9 @@ function secondPageFunction(){
         let $secondPagep1 = cheerio.load(secondPageParent)
 
         let secondPageLength = $secondPagep1('body').find('div.kVWrj').length
+
+        console.log("this is lenght",secondPageLength);
+
         
         for(let j = 0; j < secondPageLength; j++){
 
@@ -133,10 +137,16 @@ function secondPageFunction(){
 
 
             console.log('/n');
+
+
+            let thirdPageUrl = `https://experts.shopify.com${$secondPagep1('body > div.kVWrj > a').eq(j).attr('href')}`;
+            console.log('this is third page url************************',thirdPageUrl);
+            await thirdPage(thirdPageUrl);
             if((secondPageLength - 1) === j){
                 resolve('second page loop is completed');
             }
             // break;
+
         }
 
 
@@ -145,4 +155,59 @@ function secondPageFunction(){
             reject(error)
         }
     })
+}
+
+
+function thirdPage(thirdPageUrl){
+    return new Promise(async (resolve,reject) => {
+
+        await page.goto(thirdPageUrl);
+        await page.waitForSelector('._34cm1');
+        let headerData;
+        let bodyData;
+
+        let result = await response(headerData,bodyData);
+        resolve()
+        // console.log("this is promise result",result.body.data.profile.serviceListing.reviews.edges);
+    })
+    
+}
+
+function response(headerData, bodyData){
+    return new Promise((resolve,reject) => {
+
+        try {
+
+            page.on('response',async (response) => {
+
+                if (response.url().endsWith("api/graphql")){
+                    console.log("this is response url",response.url());
+                    let result = await response.json();
+                    console.log("this is all result",result);
+                    if(result.data.hasOwnProperty('profile')){
+                        if(result.data.profile.hasOwnProperty('serviceListing')){
+    
+                            if(Object.keys(result.data.profile).length > 2){
+                                headerData = result;
+                            } else {
+                                bodyData = result;
+                                resolve({ body:bodyData, header: headerData });
+                            }
+                        }
+                    }
+                    
+                        
+                }
+        
+            })
+
+        } catch(error){
+            console.log("this is error",error);
+        }
+        
+
+    })
+
+    
+
 }

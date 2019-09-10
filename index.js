@@ -235,11 +235,7 @@ function extractComments() {
             let element = await page.$('div._34cm1 > nav > button:nth-child(2)');
             let props =  await ( await element.getProperty('disabled') ).jsonValue(); 
             console.log("this is props",props);
-            // for(let i = 0; i < length; i++){
-            //     let article = cheerio.load( thirdPageRoot('div._34cm1 > ._2RRwD').eq(i).html() );
-            //     console.log("this is article",i,article.html());
-            // }
-            
+            await commentWithDetails(thirdPageRoot,length);
             if(props){
                 console.log("breaking it",length);
                 resolve(true);
@@ -258,4 +254,32 @@ function extractComments() {
 
 
 
+}
+
+
+function commentWithDetails(thirdPageRoot,length){
+    return new Promise((resolve,reject) => {
+
+        for(let i = 0; i < length; i++){
+            let article = cheerio.load( thirdPageRoot('div._34cm1 > ._2RRwD').eq(i).html() );
+            let childrenRoot1 = cheerio.load( article('div.Polaris-Stack:nth-child(1)').html() );
+            let subChildren1 = cheerio.load( childrenRoot1('div:nth-child(1)').html() );
+            let companyName = subChildren1('._12oDh').html();
+            let commentDate = subChildren1('div >.mXNSP > span').html();
+            let subChildren2 = cheerio.load( childrenRoot1('div:nth-child(2)').html() );
+            let rating = subChildren2('span._6ymh-').html();
+            let childrenRoot2 = cheerio.load( article('div.Polaris-TextContainer:nth-child(2)').html() );
+            let comment = childrenRoot2('.mXNSP').html();
+            console.log("this is company name",companyName);
+            console.log("this is company date", commentDate);
+            console.log("this is rating", rating);
+            console.log('this is comment', comment);
+
+            if(i === (length - 1)){
+                console.log("here we will break");   
+                resolve();
+            }
+        }
+
+    })
 }

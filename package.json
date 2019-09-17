@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migrate": "cd node_modules/sequelize-cli/lib/sequelize/db:migrate"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "mysql2": "^1.7.0",
     "puppeteer": "^1.19.0",
-    "sequelize": "^5.15.0",
-    "sequelize-cli": "^5.5.0"
+    "sequelize": "^5.18.4",
+    "sequelize-cli": "^5.5.1"
   }
 }

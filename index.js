@@ -1,7 +1,8 @@
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const { waitForNetworkIdle } = require('./utlis/NetworkIdle');
-const { insertShopifyExpertCategory } = require('./utlis/shopifyTable1');
+const { insertShopifyExpertCategory } = require('./utlis/shopifyTable1');;
+const { insertShopifyExpertCompanies } = require('./utlis/shopifyTable2');
 // let staticUrl = 'https://experts.shopify.com'
 
 let browser;
@@ -55,8 +56,12 @@ let page;
             console.log("first page navigation urls", firstPageNavigationUrl);
             console.log('\n');
 
-            // here we will store first page data in database
-            // await insertShopifyExpertCategory({ companyCategory: firstPageHeadings, companyOverview: firstPageDescription, companyImageUrl: firstPageImageUrl })
+            // here we will store first page data in database;
+            await insertShopifyExpertCategory({ 
+                companyCategory: firstPageHeadings, 
+                companyOverview: firstPageDescription, 
+                companyImageUrl: firstPageImageUrl
+            })
 
             await page.goto(firstPageNavigationUrl, { waitUntil: 'networkidle0' });
             await page.waitForSelector('._3EE3N');
@@ -181,7 +186,6 @@ function extractSecondPage() {
                 let secondPageJobsCompleted = secondPageChidl2('div >div >div:nth-child(2)').html();
                 let secondPageRating = secondPageChild3('div > div > div:nth-child(2) > div > div:nth-child(1)').html();
 
-
                 console.log("this is second page logo", secondPageCompanyLogo);
                 console.log("this is second page Company Name", secondPageCompanyName);
                 console.log("this is second page Company Location", secondPageCompanyLocation);
@@ -191,6 +195,17 @@ function extractSecondPage() {
 
 
                 console.log('/n');
+
+                // here we will store second page data
+                await insertShopifyExpertCompanies({ 	
+                    companyCategory: companyCategory, 
+                    companyName: secondPageCompanyName, 
+                    companyLocation: secondPageCompanyLocation, 
+                    companyServicePrice: secondPageStartingPrice,
+                    companyCompletedJobs: secondPageJobsCompleted,
+                    companyRating: secondPageRating,
+                    companyLogoUrl: secondPageCompanyLogo
+                });
 
 
                 let thirdPageUrl = `https://experts.shopify.com${$secondPagep1('body > div.kVWrj > a').eq(j).attr('href')}`;

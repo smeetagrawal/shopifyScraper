@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const shopifyExpertCompaniesComment = sequelize.define('shopifyExpertCompaniesComment', {
-    companySection: DataTypes.STRING,
+    companyCategory: DataTypes.STRING,
     commentedOnCompany: DataTypes.STRING,
     commentedBy: DataTypes.STRING,
     commentOnDate: DataTypes.STRING,

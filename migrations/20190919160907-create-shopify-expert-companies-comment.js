@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      companySection: {
+      companyCategory: {
         type: Sequelize.STRING
       },
       commentedOnCompany: {

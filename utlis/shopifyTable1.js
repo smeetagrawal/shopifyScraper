@@ -7,11 +7,12 @@ module.exports.insertShopifyExpertCategory = (data) => {
 
         try {
             let result = await shopifyCategoryModel.create(data);
-            console.log("this is result", result.dataValues);
+            // console.log("this is result", result.dataValues);
+            console.log("shopify category data inserted successfully (table1)")
             resolve();
 
         } catch (error) {
-            console.log("error while inserting data in table 1");
+            console.log("error while inserting data in table 1",error);
         }
     })
 

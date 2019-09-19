@@ -6,7 +6,8 @@ module.exports.insertShopifyCompanyComment = (data) => {
         try {
 
         let result = await shopifyCommentModel.create(data);
-        console.log("this is result", result.dataValues);
+        // console.log("this is result", result.dataValues);
+        console.log("shopify company comment inserted successfully (table3)");
         resolve();
 
         } catch(error){

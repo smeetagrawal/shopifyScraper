@@ -52,11 +52,11 @@ let page;
             let firstPageHeadings = $2('._3igjR > .Polaris-Heading > span').text();
             let firstPageDescription = $2('._3igjR > ._1c52H > .Polaris-TextContainer > p').text();
 
-            console.log("first page image urls", firstPageImageUrl);
+            // console.log("first page image urls", firstPageImageUrl);
             console.log("first page Category", firstPageHeadings);
-            console.log("first page Description", firstPageDescription);
-            console.log("first page navigation urls", firstPageNavigationUrl);
-            console.log('\n');
+            // console.log("first page Description", firstPageDescription);
+            // console.log("first page navigation urls", firstPageNavigationUrl);
+            // console.log('\n');
 
             // here we will store first page data in database;
             await insertShopifyExpertCategory({ 
@@ -188,12 +188,12 @@ function extractSecondPage() {
                 let secondPageJobsCompleted = secondPageChidl2('div >div >div:nth-child(2)').html();
                 let secondPageRating = secondPageChild3('div > div > div:nth-child(2) > div > div:nth-child(1)').html();
 
-                console.log("this is second page logo", secondPageCompanyLogo);
-                console.log("this is second page Company Name", secondPageCompanyName);
-                console.log("this is second page Company Location", secondPageCompanyLocation);
-                console.log("this is second page price", secondPageStartingPrice);
-                console.log("this is second page jobs completed", secondPageJobsCompleted);
-                console.log("this is second page ratings", secondPageRating);
+                // console.log("this is second page logo", secondPageCompanyLogo);
+                // console.log("this is second page Company Name", secondPageCompanyName);
+                // console.log("this is second page Company Location", secondPageCompanyLocation);
+                // console.log("this is second page price", secondPageStartingPrice);
+                // console.log("this is second page jobs completed", secondPageJobsCompleted);
+                // console.log("this is second page ratings", secondPageRating);
 
 
                 console.log('/n');
@@ -306,9 +306,9 @@ function extractComments() {
 }
 
 
-function commentWithDetails(thirdPageRoot, length, companySection, companyName){
+function commentWithDetails(thirdPageRoot, length, companyCategory, companyName){
     return new Promise(async (resolve,reject) => {
-        console.log("this is companySection and companyName", companySection, companyName);
+        // console.log("this is companySection and companyName", companyCategory, companyName);
         try {
 
             for(let i = 0; i < length; i++){
@@ -321,14 +321,14 @@ function commentWithDetails(thirdPageRoot, length, companySection, companyName){
                 let rating = subChildren2('span._6ymh-').html();
                 let childrenRoot2 = cheerio.load( article('div.Polaris-TextContainer:nth-child(2)').html() );
                 let comment = childrenRoot2('.mXNSP').html();
-                console.log("this is company name",commentedCompanyName);
-                console.log("this is company date", commentDate);
-                console.log("this is rating", rating);
-                console.log('this is comment', comment);
+                // console.log("this is company name",commentedCompanyName);
+                // console.log("this is company date", commentDate);
+                // console.log("this is rating", rating);
+                // console.log('this is comment', comment);
                 
                 // here we will add Comments in database
                 await insertShopifyCompanyComment({
-                    companySection: companySection,
+                    companyCategory: companyCategory,
                     commentedOnCompany: companyName,
                     commentedBy: commentedCompanyName,
                     commentOnDate: commentDate,

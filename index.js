@@ -3,6 +3,8 @@ const cheerio = require('cheerio');
 const { waitForNetworkIdle } = require('./utlis/NetworkIdle');
 const { insertShopifyExpertCategory } = require('./utlis/shopifyTable1');;
 const { insertShopifyExpertCompanies } = require('./utlis/shopifyTable2');
+const { insertShopifyCompanyComment } = require('./utlis/shopifyTable3');
+
 // let staticUrl = 'https://experts.shopify.com'
 
 let browser;
@@ -295,7 +297,7 @@ function extractComments() {
             }
 
         } catch(error){
-            console.log("error while extracting commnets",error);
+            console.log("error while extracting comments",error);
         }
         
 
@@ -305,25 +307,35 @@ function extractComments() {
 
 
 function commentWithDetails(thirdPageRoot, length, companySection, companyName){
-    return new Promise((resolve,reject) => {
-        // console.log("this is companySection and companyName", companySection, companyName);
+    return new Promise(async (resolve,reject) => {
+        console.log("this is companySection and companyName", companySection, companyName);
         try {
 
             for(let i = 0; i < length; i++){
                 let article = cheerio.load( thirdPageRoot('div._34cm1 > ._2RRwD').eq(i).html() );
                 let childrenRoot1 = cheerio.load( article('div.Polaris-Stack:nth-child(1)').html() );
                 let subChildren1 = cheerio.load( childrenRoot1('div:nth-child(1)').html() );
-                let companyName = subChildren1('._12oDh').html();
+                let commentedCompanyName = subChildren1('._12oDh').html();
                 let commentDate = subChildren1('div >.mXNSP > span').html();
                 let subChildren2 = cheerio.load( childrenRoot1('div:nth-child(2)').html() );
                 let rating = subChildren2('span._6ymh-').html();
                 let childrenRoot2 = cheerio.load( article('div.Polaris-TextContainer:nth-child(2)').html() );
                 let comment = childrenRoot2('.mXNSP').html();
-                console.log("this is company name",companyName);
+                console.log("this is company name",commentedCompanyName);
                 console.log("this is company date", commentDate);
                 console.log("this is rating", rating);
                 console.log('this is comment', comment);
-    
+                
+                // here we will add Comments in database
+                await insertShopifyCompanyComment({
+                    companySection: companySection,
+                    commentedOnCompany: companyName,
+                    commentedBy: commentedCompanyName,
+                    commentOnDate: commentDate,
+                    commentRating: rating,
+                    comment: comment
+                });
+
                 if(i === (length - 1)){
                     console.log("here we will break");   
                     resolve();
@@ -331,7 +343,8 @@ function commentWithDetails(thirdPageRoot, length, companySection, companyName){
             }
 
         } catch(error){
-            console.log("this is error while fetching comments",error);
+            console.log("this is error while extracting comments with details",error);
+            resolve();
         }
         
 

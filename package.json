@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "migrate": "./node_modules/sequelize-cli/lib/sequelize db:migrate"
+    "migrate": "cd ./node_modules/sequelize-cli/lib/sequelize db:migrate"
   },
   "author": "",
   "license": "ISC",

@@ -10,6 +10,7 @@ module.exports.insertShopifyExpertCompanies = (data) => {
 
             let result = await shopifyCompaniesModel.create(data);
             console.log("this is result", result.dataValues);
+            resolve();
 
         } catch (error) {
             console.log("this is error while inserting companies data", error);

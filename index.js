@@ -61,7 +61,7 @@ let page;
             // here we will store first page data in database;
             await insertShopifyExpertCategory({ 
                 companyCategory: firstPageHeadings, 
-                companyOverview: firstPageDescription, 
+                companyOverview: firstPageDescription,
                 companyImageUrl: firstPageImageUrl
             })
 
@@ -70,6 +70,12 @@ let page;
 
             let result = await checkSecondPage(firstPageNavigationUrl);
             console.log("this is result", result);
+
+            // if(i === (length - 1)){
+            //     console.log("in exit")
+            //     process.exit();
+            // } 
+
 
             //    break;
         }

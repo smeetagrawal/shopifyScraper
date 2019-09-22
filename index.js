@@ -71,10 +71,10 @@ let page;
             let result = await checkSecondPage(firstPageNavigationUrl);
             console.log("this is result", result);
 
-            // if(i === (length - 1)){
-            //     console.log("in exit")
-            //     process.exit();
-            // } 
+            if(i === (length - 1)){
+                console.log("in exit")
+                process.exit();
+            } 
 
 
             //    break;

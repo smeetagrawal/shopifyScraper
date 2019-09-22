@@ -1,6 +1,5 @@
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
-const { waitForNetworkIdle } = require('./utlis/NetworkIdle');
 const { insertShopifyExpertCategory } = require('./utlis/shopifyTable1');;
 const { insertShopifyExpertCompanies } = require('./utlis/shopifyTable2');
 const { insertShopifyCompanyComment } = require('./utlis/shopifyTable3');
@@ -295,8 +294,7 @@ function extractComments() {
                     console.log("this is total length",length);
                     await Promise.all([
                         page.click('div._34cm1 > nav > button:nth-child(2)'),
-                        // page.waitFor(4000)
-                        waitForNetworkIdle(page, 2000)
+                        page.waitFor(3000)
                     ]);
                 }
             
@@ -349,7 +347,7 @@ function commentWithDetails(thirdPageRoot, length, companyCategory, companyName)
             }
 
         } catch(error){
-            console.log("this is error while extracting comments with details",error);
+            // console.log("this is error while extracting comments with details",error);
             resolve();
         }
         

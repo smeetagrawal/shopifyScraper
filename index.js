@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
+const { networkIdle } = require('./utlis/networkIdle');
 const { insertShopifyExpertCategory } = require('./utlis/shopifyTable1');;
 const { insertShopifyExpertCompanies } = require('./utlis/shopifyTable2');
 const { insertShopifyCompanyComment } = require('./utlis/shopifyTable3');
@@ -294,7 +295,8 @@ function extractComments() {
                     console.log("this is total length",length);
                     await Promise.all([
                         page.click('div._34cm1 > nav > button:nth-child(2)'),
-                        page.waitFor(3000)
+                        // page.waitFor(3000)
+                        networkIdle(page, 2000)
                     ]);
                 }
             

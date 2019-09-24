@@ -17,6 +17,7 @@ let page;
         browser = await puppeteer.launch({ headless: false });
         page = await browser.newPage();
         page.setUserAgent('Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36');
+        page.setDefaultNavigationTimeout(0);
 
 
         await page.goto('https://experts.shopify.com/services/expert-guidance');
@@ -276,26 +277,23 @@ function extractComments() {
                 let companyName = thirdPageRoot1('div > div.pV5Fa > div > h1 > div > a').html();
                 let thirdPageRoot2 = cheerio.load( await page.$eval('div.HYncG', (element) => element.innerHTML) );
                 let companySection = thirdPageRoot2('div > h2').html();
-                // let thirdPageParent = cheerio.load( await page.evaluate(() => document.body.innerHTML) )
-                // let thirdPageRoot = cheerio.load(thirdPageParent('div.u7SZF').html());  // it creates issue and take time to extract data 
-                // console.log("this is thirdpage root", thirdPageParent.html());
+               
                 let thirdPageRoot3 = cheerio.load(await page.$eval('div.u7SZF', (element) => element.innerHTML) ); // while using with puppeeteer we can hold it while its value is not set yet
                 // console.log("this is thirdpage root",thirdPageRoot.html());
                 let length =  thirdPageRoot3('div._34cm1').find('._2RRwD').length;
-                // let props = thirdPageRoot('div._34cm1 > nav > button:nth-child(2)').prop('disabled');
                 let element = await page.$('div._34cm1 > nav > button:nth-child(2)');
                 let props =  await ( await element.getProperty('disabled') ).jsonValue(); 
                 console.log("this is props",props);
                 await commentWithDetails(thirdPageRoot3, length, companySection, companyName);
                 if(props){
                     console.log("breaking it",length);
-                    resolve(true);
+                    resolve(true);  
                     break;  
                 } else {
                     console.log("this is total length",length);
                     await Promise.all([
                         page.click('div._34cm1 > nav > button:nth-child(2)'),
-                        // page.waitFor(3000)
+                        // page.waitFor(3000),
                         networkIdle(page, 2000)
                     ]);
                 }
@@ -315,6 +313,7 @@ function extractComments() {
 function commentWithDetails(thirdPageRoot, length, companyCategory, companyName){
     return new Promise(async (resolve,reject) => {
         // console.log("this is companySection and companyName", companyCategory, companyName);
+        console.log("this is ((((((((((************$$$$$$$$$$thirdpageroot", thirdPageRoot.html());
         try {
 
             for(let i = 0; i < length; i++){
@@ -349,7 +348,7 @@ function commentWithDetails(thirdPageRoot, length, companyCategory, companyName)
             }
 
         } catch(error){
-            // console.log("this is error while extracting comments with details",error);
+            console.log("this is error while extracting comments with details",error);
             resolve();
         }
         

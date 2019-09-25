@@ -70,10 +70,10 @@ let page;
             await page.waitForSelector('._3EE3N');
 
             let result = await checkSecondPage(firstPageNavigationUrl);
-            console.log("this is result", result);
+            // console.log("this is result", result);
 
             if(i === (length - 1)){
-                console.log("in exit")
+                console.log("you have successfully scraped all data")
                 process.exit();
             } 
 

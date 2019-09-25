@@ -313,7 +313,6 @@ function extractComments() {
 function commentWithDetails(thirdPageRoot, length, companyCategory, companyName){
     return new Promise(async (resolve,reject) => {
         // console.log("this is companySection and companyName", companyCategory, companyName);
-        console.log("this is ((((((((((************$$$$$$$$$$thirdpageroot", thirdPageRoot.html());
         try {
 
             for(let i = 0; i < length; i++){

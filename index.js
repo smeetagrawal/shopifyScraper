@@ -88,6 +88,7 @@ let page;
 
 })()
 
+// this function will check if second page contains list of companies, then only it will proceed else it will resolve and next url will taken into process
 function checkSecondPage(secondPageUrl) {
 
     let page_no = 1;
@@ -133,6 +134,7 @@ function checkSecondPage(secondPageUrl) {
     
 }
 
+// this function will extract the information of companies from second page(eg- companyname, location, rating) and store that into database
 function extractSecondPage() {
 
     return new Promise(async (resolve, reject) => {
@@ -235,7 +237,7 @@ function extractSecondPage() {
     })
 }
 
-
+// this function will check if patricular company has comments then only it will proceed further else it will resolve
 function extractThirdPage(thirdPageUrl) {
     return new Promise(async (resolve, reject) => {
 
@@ -265,7 +267,7 @@ function extractThirdPage(thirdPageUrl) {
 
 }
 
-
+// this function will extract all the comments related to particular company ( with pagination )
 function extractComments() {
 
     return new Promise(async (resolve, reject) => {
@@ -309,7 +311,7 @@ function extractComments() {
 
 }
 
-
+// this function will store all comments details like (companyName, commentedBy, rating, comment) into database
 function commentWithDetails(thirdPageRoot, length, companyCategory, companyName){
     return new Promise(async (resolve,reject) => {
         // console.log("this is companySection and companyName", companyCategory, companyName);

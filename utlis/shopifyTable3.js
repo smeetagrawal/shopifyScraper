@@ -1,6 +1,7 @@
 const models = require('../models');
 const shopifyCommentModel = models.shopifyExpertCompaniesComment;
 
+// this function will store third page data into database
 module.exports.insertShopifyCompanyComment = (data) => {
     return new Promise(async (resolve,reject) => {
         try {

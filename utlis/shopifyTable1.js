@@ -1,7 +1,7 @@
 const models = require('../models');
 const shopifyCategoryModel = models.shopifyExpertGuidanceCategory;
 
-
+// this function will store first page data into database
 module.exports.insertShopifyExpertCategory = (data) => {
     return new Promise(async (resolve, reject) => {
 

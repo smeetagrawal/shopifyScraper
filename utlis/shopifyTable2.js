@@ -3,7 +3,7 @@ const shopifyCompaniesModel = models.shopifyExpertGuidanceCompanies;
 
 // console.log("this is model", shopifyCompaniesModel)
 
-
+// this function will store second page data into database
 module.exports.insertShopifyExpertCompanies = (data) => {
     return new Promise(async (resolve, reject) => {
         try {

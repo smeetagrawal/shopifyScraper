@@ -17,7 +17,7 @@ let page;
         browser = await puppeteer.launch({ headless: false });
         page = await browser.newPage();
         page.setUserAgent('Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36');
-        page.setDefaultNavigationTimeout(0);
+        page.setDefaultTimeout(0);  // this will set timeout for every method 
 
 
         await page.goto('https://experts.shopify.com/services/expert-guidance');

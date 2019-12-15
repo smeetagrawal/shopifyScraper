@@ -17,7 +17,7 @@ let page;
         browser = await puppeteer.launch({ headless: false });
         page = await browser.newPage();
         page.setUserAgent('Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36');
-        page.setDefaultTimeout(0);  // this will set timeout for every method 
+        page.setDefaultTimeout(0);  // this will set timeout for every method
 
 
         await page.goto('https://experts.shopify.com/services/expert-guidance');
@@ -30,7 +30,7 @@ let page;
         let $ = cheerio.load(bodyHTML);
         let firstPageNavigationUrl
 
-        let length = $('.wdH28 > div').find('div._1GdgP').length
+        let length = $('._1r4UY > div').find('div._1GdgP').length
         console.log("smeet", length)
 
         for (i = 0; i < length; i++) {
@@ -42,7 +42,7 @@ let page;
 
             let $ = cheerio.load(bodyHTML);
 
-            let section = $('.wdH28 > div').eq(i).html()
+            let section = $('._1r4UY > div').eq(i).html()
             // console.log("section ",section)
             console.log('i', i)
 
@@ -60,8 +60,8 @@ let page;
             // console.log('\n');
 
             // here we will store first page data in database;
-            await insertShopifyExpertCategory({ 
-                companyCategory: firstPageHeadings, 
+            await insertShopifyExpertCategory({
+                companyCategory: firstPageHeadings,
                 companyOverview: firstPageDescription,
                 companyImageUrl: firstPageImageUrl
             })
@@ -75,7 +75,7 @@ let page;
             if(i === (length - 1)){
                 console.log("you have successfully scraped all data")
                 process.exit();
-            } 
+            }
 
 
             //    break;
@@ -128,10 +128,10 @@ function checkSecondPage(secondPageUrl) {
         } catch(error) {
             console.log("this is second page error",error);
         }
-        
+
     })
-   
-    
+
+
 }
 
 // this function will extract the information of companies from second page(eg- companyname, location, rating) and store that into database
@@ -145,7 +145,7 @@ function extractSecondPage() {
 
             // this will load second page html, which is fetched with help of puppeeter
             let secondPageBodyHtml = await page.evaluate(() => document.body.innerHTML);
-            // this will load all the html with the help of cheerio 
+            // this will load all the html with the help of cheerio
             let $secondPage = cheerio.load(secondPageBodyHtml);
 
             let secondPageRoot1 = cheerio.load($secondPage('div.Zk7Cl > div:nth-child(1)').html() );
@@ -208,10 +208,10 @@ function extractSecondPage() {
                 console.log('/n');
 
                 // here we will store second page data
-                await insertShopifyExpertCompanies({ 	
-                    companyCategory: companyCategory, 
-                    companyName: secondPageCompanyName, 
-                    companyLocation: secondPageCompanyLocation, 
+                await insertShopifyExpertCompanies({
+                    companyCategory: companyCategory,
+                    companyName: secondPageCompanyName,
+                    companyLocation: secondPageCompanyLocation,
                     companyServicePrice: secondPageStartingPrice,
                     companyCompletedJobs: secondPageJobsCompleted,
                     companyRating: secondPageRating,
@@ -250,7 +250,7 @@ function extractThirdPage(thirdPageUrl) {
             let thirdPageRoot = cheerio.load(thirdPageParent('div.u7SZF').html());
             let length =  thirdPageRoot('div._34cm1').find('._2RRwD').length;
             console.log("length check before scrapping comments",length);
-            if(length === 0){ // check if single comment is present, if not it will resolve 
+            if(length === 0){ // check if single comment is present, if not it will resolve
                 resolve();
             } else {
                 let result = await extractComments();
@@ -262,7 +262,7 @@ function extractThirdPage(thirdPageUrl) {
         } catch(error){
             console.log("error in third page",error);
         }
-                
+
     })
 
 }
@@ -279,18 +279,18 @@ function extractComments() {
                 let companyName = thirdPageRoot1('div > div.pV5Fa > div > h1 > div > a').html();
                 let thirdPageRoot2 = cheerio.load( await page.$eval('div.HYncG', (element) => element.innerHTML) );
                 let companySection = thirdPageRoot2('div > h2').html();
-               
+
                 let thirdPageRoot3 = cheerio.load(await page.$eval('div.u7SZF', (element) => element.innerHTML) ); // while using with puppeeteer we can hold it while its value is not set yet
                 // console.log("this is thirdpage root",thirdPageRoot.html());
                 let length =  thirdPageRoot3('div._34cm1').find('._2RRwD').length;
                 let element = await page.$('div._34cm1 > nav > button:nth-child(2)');
-                let props =  await ( await element.getProperty('disabled') ).jsonValue(); 
+                let props =  await ( await element.getProperty('disabled') ).jsonValue();
                 console.log("this is props",props);
                 await commentWithDetails(thirdPageRoot3, length, companySection, companyName);
                 if(props){
                     console.log("breaking it",length);
-                    resolve(true);  
-                    break;  
+                    resolve(true);
+                    break;
                 } else {
                     console.log("this is total length",length);
                     await Promise.all([
@@ -299,13 +299,13 @@ function extractComments() {
                         networkIdle(page, 2000)
                     ]);
                 }
-            
+
             }
 
         } catch(error){
             console.log("error while extracting comments",error);
         }
-        
+
 
     })
 
@@ -331,7 +331,7 @@ function commentWithDetails(thirdPageRoot, length, companyCategory, companyName)
                 // console.log("this is company date", commentDate);
                 // console.log("this is rating", rating);
                 // console.log('this is comment', comment);
-                
+
                 // here we will add Comments in database
                 await insertShopifyCompanyComment({
                     companyCategory: companyCategory,
@@ -343,7 +343,7 @@ function commentWithDetails(thirdPageRoot, length, companyCategory, companyName)
                 });
 
                 if(i === (length - 1)){
-                    console.log("here we will break");   
+                    console.log("here we will break");
                     resolve();
                 }
             }
@@ -352,7 +352,7 @@ function commentWithDetails(thirdPageRoot, length, companyCategory, companyName)
             console.log("this is error while extracting comments with details",error);
             resolve();
         }
-        
+
 
     })
 }
